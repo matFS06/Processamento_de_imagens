@@ -1,0 +1,41 @@
+def ler_arquivo_ppm_para_matriz(nome_arquivo):
+    matriz_imagem = []  # Inicializa uma lista vazia que será usada como matriz para armazenar os valores da imagem
+
+    try:
+        with open(nome_arquivo, 'r') as arquivo:  # Abre o arquivo no modo de leitura ('r')
+            linhas = arquivo.readlines()  # Lê todas as linhas do arquivo e armazena em uma lista
+
+            # Lendo o cabeçalho
+            formato = linhas[0].strip()  # Remove espaços em branco no início e no final da primeira linha
+            largura, altura = map(int, linhas[1].split())  # Converte as duas primeiras informações em inteiros
+            valor_maximo = int(linhas[2])  # Converte o valor máximo para inteiro
+
+            # Lendo os valores dos pixels e preenchendo a matriz
+            for linha in linhas[3:]:
+                valores = [int(valor) for valor in linha.split()]  # Converte os valores da linha para inteiros
+                matriz_imagem.append(valores)  # Adiciona a lista de valores como uma linha na matriz
+
+    except FileNotFoundError:
+        print(f"Arquivo '{nome_arquivo}' não encontrado.")
+        return None  # Retorna None se o arquivo não for encontrado
+
+    return formato, largura, altura, valor_maximo, matriz_imagem  # Retorna as informações da imagem em uma tupla
+
+
+# Exemplo de uso:
+
+# Lendo uma imagem PPM do tipo P2
+arquivo_entrada = "exemplo_entrada.ppm"
+resultado_leitura = ler_arquivo_ppm_para_matriz(arquivo_entrada)
+
+if resultado_leitura:
+    formato, largura, altura, valor_maximo, matriz_imagem = resultado_leitura
+
+    # Exibindo as informações lidas
+    print(f"Formato: {formato}")
+    print(f"Largura: {largura}")
+    print(f"Altura: {altura}")
+    print(f"Valor Máximo: {valor_maximo}")
+    print("Matriz da Imagem:")
+    for linha in matriz_imagem:
+        print(linha)
